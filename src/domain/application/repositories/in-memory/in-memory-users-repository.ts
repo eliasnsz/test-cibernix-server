@@ -1,4 +1,4 @@
-import type { User } from "../../../enterprise/entities/user";
+import type { User } from "@/domain/enterprise/entities/user";
 import type { UsersRepository } from "../users-repository";
 
 export class InMemoryUsersRepository implements UsersRepository {

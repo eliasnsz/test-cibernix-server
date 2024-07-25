@@ -1,4 +1,4 @@
-import type { User } from "../../enterprise/entities/user";
+import type { User } from "@/domain/enterprise/entities/user";
 
 export interface UsersRepository {
 	create(user: User): Promise<void>;
