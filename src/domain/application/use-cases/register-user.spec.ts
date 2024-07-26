@@ -1,7 +1,7 @@
-import { FakeHasher } from "@/tests/cryptography/fake-hasher";
+import { FakeHasher } from "@/utils/cryptography/fake-hasher";
 import type { HashGenerator } from "../cryptography/hash-generator";
-import { InMemoryUsersRepository } from "../repositories/in-memory/in-memory-users-repository";
 import { RegisterUserUseCase } from "./register-user";
+import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
 
 let hashGenerator: HashGenerator;
 let usersRepository: InMemoryUsersRepository;

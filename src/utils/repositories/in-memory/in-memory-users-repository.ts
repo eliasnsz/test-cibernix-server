@@ -1,5 +1,5 @@
+import type { UsersRepository } from "@/domain/application/repositories/users-repository";
 import type { User } from "@/domain/enterprise/entities/user";
-import type { UsersRepository } from "../users-repository";
 
 export class InMemoryUsersRepository implements UsersRepository {
 	public users: User[] = [];

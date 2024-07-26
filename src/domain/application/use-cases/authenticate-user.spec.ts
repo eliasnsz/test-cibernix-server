@@ -1,11 +1,11 @@
 import { User } from "@/domain/enterprise/entities/user";
-import { FakeEncrypter } from "@/tests/cryptography/fake-encrypter";
-import { FakeHasher } from "@/tests/cryptography/fake-hasher";
+import { FakeEncrypter } from "@/utils/cryptography/fake-encrypter";
+import { FakeHasher } from "@/utils/cryptography/fake-hasher";
 import type { Encrypter } from "../cryptography/encrypter";
 import type { HashComparer } from "../cryptography/hash-comparer";
 import type { HashGenerator } from "../cryptography/hash-generator";
-import { InMemoryUsersRepository } from "../repositories/in-memory/in-memory-users-repository";
 import { AuthenticateUserUseCase } from "./authenticate-user";
+import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
 
 let encrypter: Encrypter;
 let hashGenerator: HashComparer & HashGenerator;

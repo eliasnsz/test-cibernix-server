@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { InMemoryContentsRepository } from "../repositories/in-memory/in-memory-contents-repository";
 import { PublishContentUseCase } from "./publish-content";
+import { InMemoryContentsRepository } from "@/utils/repositories/in-memory/in-memory-contents-repository";
 
 let contentsRepository: InMemoryContentsRepository;
 let sut: PublishContentUseCase;

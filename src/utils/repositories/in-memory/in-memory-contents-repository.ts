@@ -1,5 +1,5 @@
+import type { ContentsRepository } from "@/domain/application/repositories/contents-repository";
 import type { Content } from "@/domain/enterprise/entities/content";
-import type { ContentsRepository } from "../contents-repository";
 
 export class InMemoryContentsRepository implements ContentsRepository {
 	public contents: Content[] = [];

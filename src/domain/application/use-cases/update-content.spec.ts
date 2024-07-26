@@ -1,7 +1,7 @@
 import { Content } from "@/domain/enterprise/entities/content";
 import { randomUUID } from "node:crypto";
-import { InMemoryContentsRepository } from "../repositories/in-memory/in-memory-contents-repository";
 import { UpdateContentUseCase } from "./update-content";
+import { InMemoryContentsRepository } from "@/utils/repositories/in-memory/in-memory-contents-repository";
 
 let contentsRepository: InMemoryContentsRepository;
 let sut: UpdateContentUseCase;

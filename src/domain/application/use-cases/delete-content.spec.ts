@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { Content } from "@/domain/enterprise/entities/content";
-import { InMemoryContentsRepository } from "../repositories/in-memory/in-memory-contents-repository";
 import { DeleteContentUseCase } from "./delete-content";
+import { InMemoryContentsRepository } from "@/utils/repositories/in-memory/in-memory-contents-repository";
 
 let contentsRepository: InMemoryContentsRepository;
 let sut: DeleteContentUseCase;
