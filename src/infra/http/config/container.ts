@@ -5,3 +5,4 @@ import { container } from "tsyringe";
 
 container.register("UsersRepository", PrismaUsersRepository);
 container.register("HashGenerator", BCryptHasher);
+container.register("HashComparer", BCryptHasher);

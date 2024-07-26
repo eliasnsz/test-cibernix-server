@@ -1,20 +1,19 @@
-import { User } from "@/domain/enterprise/entities/user";
-import type { HashGenerator } from "../cryptography/hash-generator";
+import "reflect-metadata";
 import { Fail, bad, nice } from "../errors/bad-nice";
 import type { UsersRepository } from "../repositories/users-repository";
 import type { HashComparer } from "../cryptography/hash-comparer";
-import type { Encrypter } from "../cryptography/encrypter";
+import { inject, injectable } from "tsyringe";
 
 interface AuthenticateUserRequest {
 	email: string;
 	password: string;
 }
 
+@injectable()
 export class AuthenticateUserUseCase {
 	constructor(
-		private usersRepository: UsersRepository,
-		private hashComparer: HashComparer,
-		private encrypter: Encrypter,
+		@inject("UsersRepository") private usersRepository: UsersRepository,
+		@inject("HashComparer") private hashComparer: HashComparer,
 	) {}
 
 	async execute({ email, password }: AuthenticateUserRequest) {
@@ -41,12 +40,8 @@ export class AuthenticateUserUseCase {
 			);
 		}
 
-		const accessToken = await this.encrypter.encrypt({
-			sub: user.id,
-		});
-
 		return nice({
-			accessToken,
+			userId: user.id,
 		});
 	}
 }

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { User } from "@/domain/enterprise/entities/user";
 import type { UsersRepository } from "../repositories/users-repository";
 import { bad, Fail, nice } from "../errors/bad-nice";

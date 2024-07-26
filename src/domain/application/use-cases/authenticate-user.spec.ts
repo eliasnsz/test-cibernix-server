@@ -1,27 +1,19 @@
 import { User } from "@/domain/enterprise/entities/user";
-import { FakeEncrypter } from "@/utils/cryptography/fake-encrypter";
 import { FakeHasher } from "@/utils/cryptography/fake-hasher";
-import type { Encrypter } from "../cryptography/encrypter";
 import type { HashComparer } from "../cryptography/hash-comparer";
 import type { HashGenerator } from "../cryptography/hash-generator";
 import { AuthenticateUserUseCase } from "./authenticate-user";
 import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
 
-let encrypter: Encrypter;
 let hashGenerator: HashComparer & HashGenerator;
 let usersRepository: InMemoryUsersRepository;
 let sut: AuthenticateUserUseCase;
 
 describe("Authenticate user use-case", async () => {
 	beforeEach(() => {
-		encrypter = new FakeEncrypter();
 		hashGenerator = new FakeHasher();
 		usersRepository = new InMemoryUsersRepository();
-		sut = new AuthenticateUserUseCase(
-			usersRepository,
-			hashGenerator,
-			encrypter,
-		);
+		sut = new AuthenticateUserUseCase(usersRepository, hashGenerator);
 	});
 
 	it("should be able to authenticate", async () => {
@@ -40,7 +32,7 @@ describe("Authenticate user use-case", async () => {
 
 		expect(error).toBeUndefined();
 		expect(result).toMatchObject({
-			accessToken: expect.any(String),
+			userId: expect.any(String),
 		});
 	});
 
