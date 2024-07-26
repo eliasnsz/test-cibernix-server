@@ -8,7 +8,19 @@ export class InMemoryContentsRepository implements ContentsRepository {
 		this.contents.push(content);
 	}
 
+	async findById(contentId: string) {
+		return this.contents.find((content) => content.id === contentId) ?? null;
+	}
+
 	async findBySlug(slug: string) {
 		return this.contents.find((content) => content.slug === slug) ?? null;
+	}
+
+	async save(content: Content) {
+		const contentIndex = this.contents.findIndex(
+			(item) => item.id === content.id,
+		);
+
+		this.contents[contentIndex] = content;
 	}
 }
