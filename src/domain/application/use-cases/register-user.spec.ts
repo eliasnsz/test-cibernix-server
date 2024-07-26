@@ -1,16 +1,16 @@
 import { InMemoryUsersRepository } from "../repositories/in-memory/in-memory-users-repository";
-import { CreateUserUseCase } from "./create-user";
+import { RegisterUserUseCase } from "./register-user";
 
 let usersRepository: InMemoryUsersRepository;
-let sut: CreateUserUseCase;
+let sut: RegisterUserUseCase;
 
-describe("Create user use-case", async () => {
+describe("Register user use-case", async () => {
 	beforeEach(() => {
 		usersRepository = new InMemoryUsersRepository();
-		sut = new CreateUserUseCase(usersRepository);
+		sut = new RegisterUserUseCase(usersRepository);
 	});
 
-	it("should be able to create a new user", async () => {
+	it("should be able to register a new user", async () => {
 		const data = {
 			name: "John Doe",
 			email: "johndoe@example.com",
@@ -24,7 +24,7 @@ describe("Create user use-case", async () => {
 		expect(usersRepository.users[0]).toMatchObject(data);
 	});
 
-	it("should not be able to create an user with existent email", async () => {
+	it("should not be able to register an user with existent email", async () => {
 		const userData = {
 			name: "John Doe",
 			email: "johndoe@example.com",

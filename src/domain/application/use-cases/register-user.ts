@@ -2,15 +2,15 @@ import { User } from "@/domain/enterprise/entities/user";
 import type { UsersRepository } from "../repositories/users-repository";
 import { bad, Fail, nice } from "../errors/bad-nice";
 
-interface CreateUserRequest {
+interface RegisterUserRequest {
 	name: string;
 	email: string;
 }
 
-export class CreateUserUseCase {
+export class RegisterUserUseCase {
 	constructor(private usersRepository: UsersRepository) {}
 
-	async execute({ name, email }: CreateUserRequest) {
+	async execute({ name, email }: RegisterUserRequest) {
 		const user = new User({ name, email });
 
 		const userWithSameEmailAlreadyExists =
