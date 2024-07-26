@@ -48,7 +48,7 @@ describe("Update Content use-case", async () => {
 		).toBeTruthy();
 	});
 
-	it("should be able to update a new content", async () => {
+	it("should be able to update a content", async () => {
 		vi.useFakeTimers();
 		vi.setSystemTime(new Date().getTime());
 
