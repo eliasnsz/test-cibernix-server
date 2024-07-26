@@ -1,5 +1,6 @@
 import { User } from "@/domain/enterprise/entities/user";
 import type { UsersRepository } from "../repositories/users-repository";
+import { bad, Fail, nice } from "../errors/bad-nice";
 
 interface CreateUserRequest {
 	name: string;
@@ -16,11 +17,15 @@ export class CreateUserUseCase {
 			await this.usersRepository.findByEmail(email);
 
 		if (userWithSameEmailAlreadyExists) {
-			throw new Error("Este email já está sendo utilizado");
+			return bad(
+				Fail.create("EMAIL_ALREADY_IN_USE", {
+					message: "Este email já está sendo utilizado",
+				}),
+			);
 		}
 
 		await this.usersRepository.create(user);
 
-		return;
+		return nice();
 	}
 }

@@ -16,8 +16,10 @@ describe("Create user use-case", async () => {
 			email: "johndoe@example.com",
 		};
 
-		await sut.execute(data);
+		const [error, result] = await sut.execute(data);
 
+		expect(error).toBeUndefined();
+		expect(result).toBeUndefined();
 		expect(usersRepository.users).toHaveLength(1);
 		expect(usersRepository.users[0]).toMatchObject(data);
 	});
@@ -35,9 +37,12 @@ describe("Create user use-case", async () => {
 			email: "johndoe@example.com",
 		};
 
-		await expect(sut.execute(anotherUserData)).rejects.toMatchObject({
-			message: "Este email já está sendo utilizado",
-		});
+		const [error, result] = await sut.execute(anotherUserData);
+
+		expect(error?.code === "EMAIL_ALREADY_IN_USE").toBeTruthy();
+		expect(
+			error?.payload.message === "Este email já está sendo utilizado",
+		).toBeTruthy();
 		expect(usersRepository.users).toHaveLength(1);
 	});
 });
