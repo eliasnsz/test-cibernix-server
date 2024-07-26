@@ -2,6 +2,7 @@ import { User } from "@/domain/enterprise/entities/user";
 import type { UsersRepository } from "../repositories/users-repository";
 import { bad, Fail, nice } from "../errors/bad-nice";
 import type { HashGenerator } from "../cryptography/hash-generator";
+import { inject, injectable } from "tsyringe";
 
 interface RegisterUserRequest {
 	name: string;
@@ -9,10 +10,11 @@ interface RegisterUserRequest {
 	password: string;
 }
 
+@injectable()
 export class RegisterUserUseCase {
 	constructor(
-		private usersRepository: UsersRepository,
-		private hashGenerator: HashGenerator,
+		@inject("UsersRepository") private usersRepository: UsersRepository,
+		@inject("HashGenerator") private hashGenerator: HashGenerator,
 	) {}
 
 	async execute({ name, email, password }: RegisterUserRequest) {
