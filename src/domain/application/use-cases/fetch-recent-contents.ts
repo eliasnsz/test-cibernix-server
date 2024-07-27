@@ -1,4 +1,6 @@
-import { Fail, bad, nice } from "../errors/bad-nice";
+import "reflect-metadata";
+import { inject, injectable } from "tsyringe";
+import { nice } from "../errors/bad-nice";
 import type { ContentsRepository } from "../repositories/contents-repository";
 
 interface FetchRecentContentsRequest {
@@ -6,8 +8,12 @@ interface FetchRecentContentsRequest {
 	limit?: number;
 }
 
+@injectable()
 export class FetchRecentContentsUseCase {
-	constructor(private contentsRepository: ContentsRepository) {}
+	constructor(
+		@inject("ContentsRepository")
+		private contentsRepository: ContentsRepository,
+	) {}
 
 	async execute({ page, limit = 30 }: FetchRecentContentsRequest) {
 		const contents = await this.contentsRepository.fetchRecent({ page, limit });

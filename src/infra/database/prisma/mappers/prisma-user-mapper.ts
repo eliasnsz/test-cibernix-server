@@ -9,8 +9,8 @@ export class PrismaUserMapper {
 			username: user.username,
 			email: user.email,
 			password: user.password,
-			createdAt: new Date(user.createdAt),
-			updatedAt: new Date(user.updatedAt),
+			createdAt: user.createdAt,
+			updatedAt: user.updatedAt,
 		});
 	}
 
@@ -20,8 +20,8 @@ export class PrismaUserMapper {
 			username: user.username,
 			email: user.email,
 			password: user.password,
-			createdAt: user.createdAt.toISOString(),
-			updatedAt: user.updatedAt.toISOString(),
+			createdAt: user.createdAt,
+			updatedAt: user.updatedAt,
 		};
 	}
 }

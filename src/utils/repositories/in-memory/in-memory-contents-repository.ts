@@ -26,7 +26,12 @@ export class InMemoryContentsRepository implements ContentsRepository {
 
 	async fetchRecent({ limit, page }: { page: number; limit: number }) {
 		const [start, end] = [limit * (page - 1), limit * page];
-		const orderedContent = this.contents.sort((a, b) =>
+
+		const publishedContents = this.contents.filter(
+			(content) => content.status === "published",
+		);
+
+		const orderedContent = publishedContents.sort((a, b) =>
 			a.publishedAt.getTime() < b.publishedAt.getTime() ? 1 : -1,
 		);
 

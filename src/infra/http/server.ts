@@ -7,6 +7,7 @@ import {
 } from "fastify-type-provider-zod";
 import { authenticateWithPassword } from "./routes/auth/authenticate-with-password";
 import { createAccount } from "./routes/users/create-account";
+import { fetchRecent } from "./routes/contents/fetch-recent";
 
 export const app = fastify();
 
@@ -22,6 +23,7 @@ app.register(require("@fastify/jwt"), {
 
 app.register(createAccount);
 app.register(authenticateWithPassword);
+app.register(fetchRecent);
 
 app
 	.listen({
