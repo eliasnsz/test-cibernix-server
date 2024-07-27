@@ -23,4 +23,15 @@ export class InMemoryContentsRepository implements ContentsRepository {
 
 		this.contents[contentIndex] = content;
 	}
+
+	async fetchRecent({ limit, page }: { page: number; limit: number }) {
+		const [start, end] = [limit * (page - 1), limit * page];
+		const orderedContent = this.contents.sort((a, b) =>
+			a.publishedAt.getTime() < b.publishedAt.getTime() ? 1 : -1,
+		);
+
+		const contents = orderedContent.slice(start, end);
+
+		return contents;
+	}
 }
