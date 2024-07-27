@@ -6,7 +6,7 @@ import type { HashGenerator } from "../cryptography/hash-generator";
 import { inject, injectable } from "tsyringe";
 
 interface RegisterUserRequest {
-	name: string;
+	username: string;
 	email: string;
 	password: string;
 }
@@ -18,7 +18,7 @@ export class RegisterUserUseCase {
 		@inject("HashGenerator") private hashGenerator: HashGenerator,
 	) {}
 
-	async execute({ name, email, password }: RegisterUserRequest) {
+	async execute({ username, email, password }: RegisterUserRequest) {
 		const userWithSameEmailAlreadyExists =
 			await this.usersRepository.findByEmail(email);
 
@@ -30,9 +30,20 @@ export class RegisterUserUseCase {
 			);
 		}
 
+		const userWithSameUsernameAlreadyExists =
+			await this.usersRepository.findByUsername(username);
+
+		if (userWithSameUsernameAlreadyExists) {
+			return bad(
+				Fail.create("USERNAME_ALREADY_IN_USE", {
+					message: "Este nome de usuário já está sendo utilizado",
+				}),
+			);
+		}
+
 		const encryptedPassword = await this.hashGenerator.hash(password);
 
-		const user = new User({ name, email, password: encryptedPassword });
+		const user = new User({ username, email, password: encryptedPassword });
 
 		await this.usersRepository.create(user);
 

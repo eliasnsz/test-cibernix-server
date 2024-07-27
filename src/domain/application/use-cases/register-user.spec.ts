@@ -16,7 +16,7 @@ describe("Register user use-case", async () => {
 
 	it("should be able to register a new user", async () => {
 		const data = {
-			name: "John Doe",
+			username: "JohnDoe",
 			email: "johndoe@example.com",
 			password: "123456",
 		};
@@ -27,14 +27,14 @@ describe("Register user use-case", async () => {
 		expect(result).toBeUndefined();
 		expect(usersRepository.users).toHaveLength(1);
 		expect(usersRepository.users[0]).toMatchObject({
-			name: data.name,
+			username: data.username,
 			email: data.email,
 		});
 	});
 
 	it("should not be able to register an user with existent email", async () => {
 		const userData = {
-			name: "John Doe",
+			username: "JohnDoe",
 			email: "johndoe@example.com",
 			password: "123456",
 		};
@@ -42,7 +42,7 @@ describe("Register user use-case", async () => {
 		await sut.execute(userData);
 
 		const anotherUserData = {
-			name: "Another User With Same Email",
+			username: "AnotherUserWithSameEmail",
 			email: "johndoe@example.com",
 			password: "123456",
 		};
@@ -56,9 +56,33 @@ describe("Register user use-case", async () => {
 		expect(usersRepository.users).toHaveLength(1);
 	});
 
+	it("should not be able to register an user with existent username", async () => {
+		const userData = {
+			username: "johndoe",
+			email: "johndoe@example.com",
+			password: "123456",
+		};
+
+		await sut.execute(userData);
+
+		const anotherUserData = {
+			username: "johndoe",
+			email: "anotherEmail@example.com",
+			password: "123456",
+		};
+
+		const [error, r] = await sut.execute(anotherUserData);
+
+		expect(error?.code === "USERNAME_ALREADY_IN_USE").toBeTruthy();
+		expect(
+			error?.payload.message === "Este nome de usuário já está sendo utilizado",
+		).toBeTruthy();
+		expect(usersRepository.users).toHaveLength(1);
+	});
+
 	it("should be able to hash the password correctly", async () => {
 		const data = {
-			name: "John Doe",
+			username: "JohnDoe",
 			email: "johndoe@example.com",
 			password: "123456",
 		};

@@ -6,7 +6,7 @@ export class PrismaUserMapper {
 	static toDomain(user: PrismaUser): User {
 		return new User({
 			id: user.id,
-			name: user.name,
+			username: user.username,
 			email: user.email,
 			password: user.password,
 			createdAt: new Date(user.createdAt),
@@ -17,7 +17,7 @@ export class PrismaUserMapper {
 	static toPrisma(user: User): Prisma.UserUncheckedCreateInput {
 		return {
 			id: user.id,
-			name: user.name,
+			username: user.username,
 			email: user.email,
 			password: user.password,
 			createdAt: user.createdAt.toISOString(),

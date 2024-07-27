@@ -3,7 +3,7 @@ import type { Optional } from "../../types/optional";
 
 interface UserProps {
 	id: string;
-	name: string;
+	username: string;
 	email: string;
 	password: string;
 	createdAt: Date;
@@ -17,8 +17,8 @@ export class User {
 		return this.props.id;
 	}
 
-	get name() {
-		return this.props.name;
+	get username() {
+		return this.props.username;
 	}
 
 	get email() {

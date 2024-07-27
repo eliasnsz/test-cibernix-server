@@ -10,7 +10,7 @@ export async function createAccount(app: FastifyInstance) {
 		url: "/users",
 		schema: {
 			body: z.object({
-				name: z.string().min(6),
+				username: z.string().min(4),
 				email: z.string().email(),
 				password: z.string().min(6),
 			}),
@@ -18,10 +18,11 @@ export async function createAccount(app: FastifyInstance) {
 		handler: async (request, reply) => {
 			const createAccountUseCase = container.resolve(RegisterUserUseCase);
 
-			const { name, email, password } = request.body;
+			const { username, email, password } = request.body;
+			console.log({ username, email, password });
 
 			const [error] = await createAccountUseCase.execute({
-				name,
+				username,
 				email,
 				password,
 			});

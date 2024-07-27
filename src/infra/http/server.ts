@@ -1,5 +1,6 @@
 import fastify from "fastify";
 import "./config/container";
+import fastifyCors from "@fastify/cors";
 import {
 	serializerCompiler,
 	validatorCompiler,
@@ -12,6 +13,9 @@ export const app = fastify();
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
+app.register(fastifyCors, {
+	origin: "*",
+});
 app.register(require("@fastify/jwt"), {
 	secret: "supersecret",
 });
