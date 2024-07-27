@@ -19,7 +19,6 @@ export async function createAccount(app: FastifyInstance) {
 			const createAccountUseCase = container.resolve(RegisterUserUseCase);
 
 			const { username, email, password } = request.body;
-			console.log({ username, email, password });
 
 			const [error] = await createAccountUseCase.execute({
 				username,
@@ -33,9 +32,15 @@ export async function createAccount(app: FastifyInstance) {
 						message: error.payload.message,
 						statusCode: 409,
 					});
+
+				case "USERNAME_ALREADY_IN_USE":
+					return reply.status(409).send({
+						message: error.payload.message,
+						statusCode: 409,
+					});
 			}
 
-			return "hello";
+			return reply.status(201).send();
 		},
 	});
 }

@@ -53,7 +53,7 @@ export async function authenticateWithPassword(app: FastifyInstance) {
 
 			const access_token = await reply.jwtSign(
 				{ id: result.userId },
-				{ expiresIn: "7d" },
+				{ expiresIn: "30d" },
 			);
 
 			return reply.status(200).send({
