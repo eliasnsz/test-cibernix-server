@@ -35,7 +35,7 @@ enum ContentStatus {
 model Content {
   id            String        @id @default(uuid())
   title         String
-  slug          String        @unique
+  slug          String
   body          String
   ownerUsername String?       @map("owner_username")
   status        ContentStatus @default(published)
@@ -43,7 +43,7 @@ model Content {
   updatedAt     DateTime      @updatedAt() @map("updated_at")
   deletedAt     DateTime?     @map("deleted_at")
 
-  User     User?   @relation(fields: [authorId], references: [id])
+  user     User?   @relation(fields: [authorId], references: [id])
   authorId String?
 
   @@unique([slug, authorId])

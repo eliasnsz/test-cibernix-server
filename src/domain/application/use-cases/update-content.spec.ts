@@ -1,21 +1,32 @@
 import { Content } from "@/domain/enterprise/entities/content";
-import { randomUUID } from "node:crypto";
 import { UpdateContentUseCase } from "./update-content";
 import { InMemoryContentsRepository } from "@/utils/repositories/in-memory/in-memory-contents-repository";
+import { User } from "@/domain/enterprise/entities/user";
+import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
+import { randomUUID } from "node:crypto";
 
+let usersRepository: InMemoryUsersRepository;
 let contentsRepository: InMemoryContentsRepository;
 let sut: UpdateContentUseCase;
 
+const user = new User({
+	username: "johndoe",
+	email: "johndoe@example.com",
+	password: "123456",
+});
+
 describe("Update Content use-case", async () => {
-	beforeEach(() => {
+	beforeEach(async () => {
+		usersRepository = new InMemoryUsersRepository();
 		contentsRepository = new InMemoryContentsRepository();
+		await usersRepository.create(user);
 		sut = new UpdateContentUseCase(contentsRepository);
 	});
 
 	it("should not be able to update content that doesn't exists", async () => {
 		const [error] = await sut.execute({
 			contentId: "not-existent-id",
-			authorId: randomUUID(),
+			authorId: user.id,
 			title: "Example title",
 			body: "Example body",
 		});
@@ -36,7 +47,7 @@ describe("Update Content use-case", async () => {
 
 		const [error] = await sut.execute({
 			contentId: anotherUserContent.id,
-			authorId: randomUUID(),
+			authorId: user.id,
 			title: "Example title",
 			body: "Example body",
 		});
@@ -53,7 +64,7 @@ describe("Update Content use-case", async () => {
 		vi.setSystemTime(new Date().getTime());
 
 		const content = new Content({
-			authorId: randomUUID(),
+			authorId: user.id,
 			title: "Example title",
 			body: "Example body",
 		});
@@ -87,14 +98,14 @@ describe("Update Content use-case", async () => {
 	it("should not be able to have slug conflict on title update", async () => {
 		await contentsRepository.create(
 			new Content({
-				authorId: randomUUID(),
+				authorId: user.id,
 				title: "Example title",
 				body: "Example body",
 			}),
 		);
 
 		const contentToEdit = new Content({
-			authorId: randomUUID(),
+			authorId: user.id,
 			title: "Content to edit",
 			body: "Another example body",
 		});

@@ -4,6 +4,9 @@ import { prisma } from "../client";
 import { PrismaContentMapper } from "../mappers/prisma-content-mapper";
 
 export class PrismaContentsRepository implements ContentsRepository {
+	findBySlug(slug: string): Promise<Content | null> {
+		throw new Error("Method not implemented.");
+	}
 	async create(content: Content) {
 		await prisma.content.create({
 			data: PrismaContentMapper.toPrisma(content),
@@ -21,9 +24,14 @@ export class PrismaContentsRepository implements ContentsRepository {
 		return PrismaContentMapper.toDomain(content);
 	}
 
-	async findBySlug(slug: string) {
+	async findByAuthorIdAndSlug(authorId: string, slug: string) {
 		const content = await prisma.content.findUnique({
-			where: { slug },
+			where: {
+				slug_authorId: {
+					slug,
+					authorId: authorId,
+				},
+			},
 		});
 
 		if (!content) {

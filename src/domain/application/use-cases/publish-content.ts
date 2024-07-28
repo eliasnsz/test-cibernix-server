@@ -1,8 +1,10 @@
+import "reflect-metadata";
 import { Content } from "@/domain/enterprise/entities/content";
 import { bad, Fail, nice } from "../errors/bad-nice";
 import type { ContentsRepository } from "../repositories/contents-repository";
 import { Slug } from "@/domain/enterprise/value-objects/slug";
 import type { UsersRepository } from "../repositories/users-repository";
+import { inject, injectable } from "tsyringe";
 
 interface PublishContentRequest {
 	title: string;
@@ -10,10 +12,12 @@ interface PublishContentRequest {
 	authorId: string;
 }
 
+@injectable()
 export class PublishContentUseCase {
 	constructor(
+		@inject("ContentsRepository")
 		private contentsRepository: ContentsRepository,
-		private usersRepository: UsersRepository,
+		@inject("UsersRepository") private usersRepository: UsersRepository,
 	) {}
 
 	async execute({ title, body, authorId }: PublishContentRequest) {
@@ -27,14 +31,13 @@ export class PublishContentUseCase {
 			);
 		}
 
-		const anotherContentWithSameSlug = await this.contentsRepository.findBySlug(
-			Slug.createFromText(title),
-		);
+		const anotherContentWithSameSlug =
+			await this.contentsRepository.findByAuthorIdAndSlug(
+				authorId,
+				Slug.createFromText(title),
+			);
 
-		if (
-			anotherContentWithSameSlug &&
-			anotherContentWithSameSlug.authorId === authorId
-		) {
+		if (anotherContentWithSameSlug) {
 			return bad(
 				Fail.create("SLUG_CONFLICT", {
 					message:

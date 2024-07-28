@@ -8,6 +8,7 @@ import {
 import { authenticateWithPassword } from "./routes/auth/authenticate-with-password";
 import { createAccount } from "./routes/users/create-account";
 import { fetchRecent } from "./routes/contents/fetch-recent";
+import { publishNewContent } from "./routes/contents/publish-new";
 
 export const app = fastify();
 
@@ -24,6 +25,7 @@ app.register(require("@fastify/jwt"), {
 app.register(createAccount);
 app.register(authenticateWithPassword);
 app.register(fetchRecent);
+app.register(publishNewContent);
 
 app
 	.listen({

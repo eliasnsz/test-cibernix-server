@@ -12,8 +12,12 @@ export class InMemoryContentsRepository implements ContentsRepository {
 		return this.contents.find((content) => content.id === contentId) ?? null;
 	}
 
-	async findBySlug(slug: string) {
-		return this.contents.find((content) => content.slug === slug) ?? null;
+	async findByAuthorIdAndSlug(authorId: string, slug: string) {
+		return (
+			this.contents.find(
+				(content) => content.slug === slug && content.authorId === authorId,
+			) ?? null
+		);
 	}
 
 	async save(content: Content) {

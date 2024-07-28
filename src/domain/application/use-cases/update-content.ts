@@ -31,9 +31,11 @@ export class UpdateContentUseCase {
 			);
 		}
 
-		const anotherContentWithSameSlug = await this.contentsRepository.findBySlug(
-			Slug.createFromText(title),
-		);
+		const anotherContentWithSameSlug =
+			await this.contentsRepository.findByAuthorIdAndSlug(
+				authorId,
+				Slug.createFromText(title),
+			);
 
 		if (anotherContentWithSameSlug) {
 			return bad(
