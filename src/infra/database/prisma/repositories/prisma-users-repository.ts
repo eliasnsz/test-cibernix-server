@@ -10,6 +10,15 @@ export class PrismaUsersRepository implements UsersRepository {
 		});
 	}
 
+	async findById(userId: string) {
+		const user = await prisma.user.findUnique({ where: { id: userId } });
+
+		if (!user) {
+			return null;
+		}
+
+		return PrismaUserMapper.toDomain(user);
+	}
 	async findByUsername(username: string) {
 		const user = await prisma.user.findUnique({ where: { username } });
 

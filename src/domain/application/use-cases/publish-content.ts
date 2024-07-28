@@ -2,6 +2,7 @@ import { Content } from "@/domain/enterprise/entities/content";
 import { bad, Fail, nice } from "../errors/bad-nice";
 import type { ContentsRepository } from "../repositories/contents-repository";
 import { Slug } from "@/domain/enterprise/value-objects/slug";
+import type { UsersRepository } from "../repositories/users-repository";
 
 interface PublishContentRequest {
 	title: string;
@@ -10,14 +11,30 @@ interface PublishContentRequest {
 }
 
 export class PublishContentUseCase {
-	constructor(private contentsRepository: ContentsRepository) {}
+	constructor(
+		private contentsRepository: ContentsRepository,
+		private usersRepository: UsersRepository,
+	) {}
 
 	async execute({ title, body, authorId }: PublishContentRequest) {
+		const user = await this.usersRepository.findById(authorId);
+
+		if (!user) {
+			return bad(
+				Fail.create("RESOURCE_NOT_FOUND", {
+					message: "Usuário não encotrado",
+				}),
+			);
+		}
+
 		const anotherContentWithSameSlug = await this.contentsRepository.findBySlug(
 			Slug.createFromText(title),
 		);
 
-		if (anotherContentWithSameSlug) {
+		if (
+			anotherContentWithSameSlug &&
+			anotherContentWithSameSlug.authorId === authorId
+		) {
 			return bad(
 				Fail.create("SLUG_CONFLICT", {
 					message:
@@ -30,6 +47,7 @@ export class PublishContentUseCase {
 			title,
 			body,
 			authorId,
+			ownerUsername: user.username,
 		});
 
 		await this.contentsRepository.create(content);

@@ -1,19 +1,29 @@
-import { randomUUID } from "node:crypto";
 import { PublishContentUseCase } from "./publish-content";
 import { InMemoryContentsRepository } from "@/utils/repositories/in-memory/in-memory-contents-repository";
+import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
+import { User } from "@/domain/enterprise/entities/user";
 
 let contentsRepository: InMemoryContentsRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: PublishContentUseCase;
 
+const user = new User({
+	username: "johndoe",
+	email: "johndoe@example.com",
+	password: "123456",
+});
+
 describe("Publish Content use-case", async () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		contentsRepository = new InMemoryContentsRepository();
-		sut = new PublishContentUseCase(contentsRepository);
+		usersRepository = new InMemoryUsersRepository();
+		await usersRepository.create(user);
+		sut = new PublishContentUseCase(contentsRepository, usersRepository);
 	});
 
 	it("should be able to publish a new content", async () => {
 		const contentData = {
-			authorId: randomUUID(),
+			authorId: user.id,
 			title: "Example title",
 			body: "Example body",
 		};
@@ -28,6 +38,7 @@ describe("Publish Content use-case", async () => {
 			slug: "example-title",
 			title: contentData.title,
 			body: contentData.body,
+			ownerUsername: user.username,
 			status: "published",
 			publishedAt: expect.any(Date),
 			updatedAt: expect.any(Date),
@@ -38,13 +49,13 @@ describe("Publish Content use-case", async () => {
 
 	it("should not be able to have slug conflict", async () => {
 		await sut.execute({
-			authorId: randomUUID(),
+			authorId: user.id,
 			title: "First content",
 			body: "Example body",
 		});
 
 		const [error, result] = await sut.execute({
-			authorId: randomUUID(),
+			authorId: user.id,
 			title: "First content",
 			body: "Example body",
 		});

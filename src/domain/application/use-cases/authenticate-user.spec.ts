@@ -19,7 +19,7 @@ describe("Authenticate user use-case", async () => {
 	it("should be able to authenticate", async () => {
 		await usersRepository.create(
 			new User({
-				name: "John Doe",
+				username: "John Doe",
 				email: "johndoe@example.com",
 				password: await hashGenerator.hash("123456"),
 			}),
@@ -39,7 +39,7 @@ describe("Authenticate user use-case", async () => {
 	it("should not be able to authenticate with invalid email", async () => {
 		await usersRepository.create(
 			new User({
-				name: "John Doe",
+				username: "John Doe",
 				email: "johndoe@example.com",
 				password: "123456",
 			}),
@@ -58,7 +58,7 @@ describe("Authenticate user use-case", async () => {
 	it("should not be able to authenticate with invalid password", async () => {
 		await usersRepository.create(
 			new User({
-				name: "John Doe",
+				username: "John Doe",
 				email: "johndoe@example.com",
 				password: "123456",
 			}),

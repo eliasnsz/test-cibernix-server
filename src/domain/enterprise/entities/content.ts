@@ -10,6 +10,7 @@ interface ContentProps {
 	title: string;
 	slug: string;
 	body: string;
+	ownerUsername: string | null;
 	status: ContentStatus;
 	publishedAt: Date;
 	updatedAt: Date;
@@ -29,6 +30,10 @@ export class Content {
 
 	get authorId() {
 		return this.props.authorId;
+	}
+
+	get ownerUsername() {
+		return this.props.ownerUsername;
 	}
 
 	get title() {
@@ -79,7 +84,13 @@ export class Content {
 	constructor(
 		props: Optional<
 			ContentProps,
-			"deletedAt" | "publishedAt" | "updatedAt" | "id" | "slug" | "status"
+			| "deletedAt"
+			| "publishedAt"
+			| "updatedAt"
+			| "id"
+			| "slug"
+			| "status"
+			| "ownerUsername"
 		>,
 	) {
 		this.props = {
@@ -88,6 +99,7 @@ export class Content {
 			authorId: props.authorId,
 			title: props.title,
 			body: props.body,
+			ownerUsername: props.ownerUsername ?? null,
 			status: "published",
 			publishedAt: props.publishedAt ?? new Date(),
 			updatedAt: new Date(),

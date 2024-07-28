@@ -7,10 +7,11 @@ export class ContentsPresenter {
 			slug: content.slug,
 			title: content.title,
 			status: content.status,
-			authorId: content.authorId,
-			publishedAt: content.publishedAt,
-			updatedAt: content.updatedAt,
-			deletedAt: content.deletedAt,
+			author_id: content.authorId,
+			owner_username: content.ownerUsername,
+			published_at: content.publishedAt,
+			updated_at: content.updatedAt,
+			deleted_at: content.deletedAt,
 		};
 	}
 }
