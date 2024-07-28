@@ -42,6 +42,15 @@ export class PrismaContentsRepository implements ContentsRepository {
 	}
 
 	async fetchRecent({ limit, page }: { page: number; limit: number }) {
+		const contentsTotalCount = await prisma.content.count({
+			where: {
+				status: "published",
+			},
+			orderBy: {
+				publishedAt: "desc",
+			},
+		});
+
 		const contents = await prisma.content.findMany({
 			where: {
 				status: "published",
@@ -53,7 +62,10 @@ export class PrismaContentsRepository implements ContentsRepository {
 			skip: limit * (page - 1),
 		});
 
-		return contents.map(PrismaContentMapper.toDomain);
+		return {
+			contents: contents.map(PrismaContentMapper.toDomain),
+			contentsTotalCount: contentsTotalCount,
+		};
 	}
 
 	async save(content: Content) {

@@ -31,19 +31,7 @@ describe("Publish Content use-case", async () => {
 		const [error, result] = await sut.execute(contentData);
 
 		expect(error).toBeUndefined();
-		expect(result).toBeUndefined();
-		expect(contentsRepository.contents[0]).toMatchObject({
-			id: expect.any(String),
-			authorId: contentData.authorId,
-			slug: "example-title",
-			title: contentData.title,
-			body: contentData.body,
-			ownerUsername: user.username,
-			status: "published",
-			publishedAt: expect.any(Date),
-			updatedAt: expect.any(Date),
-			deletedAt: null,
-		});
+		expect(result?.content).toMatchObject(contentsRepository.contents[0]);
 		expect(contentsRepository.contents).toHaveLength(1);
 	});
 

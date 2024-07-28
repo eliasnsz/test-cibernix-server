@@ -41,6 +41,6 @@ export class InMemoryContentsRepository implements ContentsRepository {
 
 		const contents = orderedContent.slice(start, end);
 
-		return contents;
+		return { contents, contentsTotalCount: publishedContents.length };
 	}
 }

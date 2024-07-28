@@ -23,7 +23,7 @@ export async function publishNewContent(app: FastifyInstance) {
 
 				const { title, body } = request.body;
 
-				const [error] = await publishNewContent.execute({
+				const [error, response] = await publishNewContent.execute({
 					title,
 					body,
 					authorId: request.user.id,
@@ -34,7 +34,7 @@ export async function publishNewContent(app: FastifyInstance) {
 						case "RESOURCE_NOT_FOUND":
 							return reply.status(404).send({
 								message: error.payload.message,
-								statusCode: 401,
+								statusCode: 404,
 							});
 
 						case "SLUG_CONFLICT":
@@ -45,7 +45,11 @@ export async function publishNewContent(app: FastifyInstance) {
 					}
 				}
 
-				return reply.status(201).send();
+				return reply.status(201).send({
+					redirect_path: `/${response.content.ownerUsername}/${
+						response.content.slug
+					}`,
+				});
 			},
 		});
 }

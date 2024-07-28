@@ -7,9 +7,9 @@ export interface ContentsRepository {
 		authorId: string,
 		slug: string,
 	): Promise<Content | null>;
-	fetchRecent({
-		limit,
-		page,
-	}: { page: number; limit: number }): Promise<Content[]>;
+	fetchRecent({ limit, page }: { page: number; limit: number }): Promise<{
+		contents: Content[];
+		contentsTotalCount: number;
+	}>;
 	save(content: Content): Promise<void>;
 }

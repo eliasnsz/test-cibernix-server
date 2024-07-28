@@ -55,6 +55,6 @@ export class PublishContentUseCase {
 
 		await this.contentsRepository.create(content);
 
-		return nice();
+		return nice({ content });
 	}
 }

@@ -11,7 +11,7 @@ export async function fetchRecent(app: FastifyInstance) {
 		url: "/contents",
 		schema: {
 			querystring: z.object({
-				page: z.coerce.number().min(1).optional(),
+				page: z.coerce.number().min(0).optional(),
 				limit: z.coerce.number().min(0).optional(),
 			}),
 		},
@@ -27,7 +27,10 @@ export async function fetchRecent(app: FastifyInstance) {
 
 			const contents = response.contents.map(ContentsPresenter.toHTTP);
 
-			return reply.status(200).send(contents);
+			return reply.status(200).send({
+				pagination: response.pagination,
+				contents,
+			});
 		},
 	});
 }
