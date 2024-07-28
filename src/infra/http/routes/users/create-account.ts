@@ -26,18 +26,20 @@ export async function createAccount(app: FastifyInstance) {
 				password,
 			});
 
-			switch (error?.code) {
-				case "EMAIL_ALREADY_IN_USE":
-					return reply.status(409).send({
-						message: error.payload.message,
-						statusCode: 409,
-					});
+			if (error) {
+				switch (error.code) {
+					case "EMAIL_ALREADY_IN_USE":
+						return reply.status(409).send({
+							message: error.payload.message,
+							statusCode: 409,
+						});
 
-				case "USERNAME_ALREADY_IN_USE":
-					return reply.status(409).send({
-						message: error.payload.message,
-						statusCode: 409,
-					});
+					case "USERNAME_ALREADY_IN_USE":
+						return reply.status(409).send({
+							message: error.payload.message,
+							statusCode: 409,
+						});
+				}
 			}
 
 			return reply.status(201).send();

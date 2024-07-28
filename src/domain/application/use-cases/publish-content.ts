@@ -26,7 +26,7 @@ export class PublishContentUseCase {
 		if (!user) {
 			return bad(
 				Fail.create("RESOURCE_NOT_FOUND", {
-					message: "Usuário não encotrado",
+					message: "Usuário não encontrado",
 				}),
 			);
 		}

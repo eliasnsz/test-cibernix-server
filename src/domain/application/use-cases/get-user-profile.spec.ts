@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import { User } from "@/domain/enterprise/entities/user";
 import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
 import { GetUserProfileUseCase } from "./get-user-profile";
@@ -21,22 +20,20 @@ describe("Get Content use-case", async () => {
 
 	it("should be able to get the user profile", async () => {
 		const [error, response] = await sut.execute({
-			authorId: user.id,
+			username: user.username,
 		});
 
 		expect(error).toBeUndefined();
-		expect(response?.profile.username).toEqual("johndoe");
-		expect(response?.profile.email).toEqual("johndoe@example.com");
-		expect(response?.profile).not.toHaveProperty("password");
+		expect(response?.user).toMatchObject(usersRepository.users[0]);
 	});
 
 	it("should not be able to get the user profile that doensn't exist", async () => {
 		const [error, response] = await sut.execute({
-			authorId: randomUUID(),
+			username: "random-name",
 		});
 
 		expect(response).toBeUndefined();
 		expect(error?.code === "RESOURCE_NOT_FOUND").toBeTruthy();
-		expect(error?.payload.message === "Usuário não encotrado").toBeTruthy();
+		expect(error?.payload.message === "Usuário não encontrado").toBeTruthy();
 	});
 });

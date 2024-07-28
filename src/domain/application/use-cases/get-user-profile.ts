@@ -5,7 +5,7 @@ import { Fail, bad, nice } from "../errors/bad-nice";
 import type { UsersRepository } from "../repositories/users-repository";
 
 interface GetUserProfileRequest {
-	authorId: string;
+	username: string;
 }
 
 type Profile = Omit<User, "password">;
@@ -17,25 +17,17 @@ export class GetUserProfileUseCase {
 		private usersRepository: UsersRepository,
 	) {}
 
-	async execute({ authorId }: GetUserProfileRequest) {
-		const user = await this.usersRepository.findById(authorId);
+	async execute({ username }: GetUserProfileRequest) {
+		const user = await this.usersRepository.findByUsername(username);
 
 		if (!user) {
 			return bad(
 				Fail.create("RESOURCE_NOT_FOUND", {
-					message: "Usuário não encotrado",
+					message: "Usuário não encontrado",
 				}),
 			);
 		}
 
-		const profile: Profile = {
-			id: user.id,
-			email: user.email,
-			username: user.username,
-			createdAt: user.createdAt,
-			updatedAt: user.updatedAt,
-		};
-
-		return nice({ profile });
+		return nice({ user });
 	}
 }

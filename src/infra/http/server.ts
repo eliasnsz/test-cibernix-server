@@ -10,6 +10,7 @@ import { createAccount } from "./routes/users/create-account";
 import { fetchRecent } from "./routes/contents/fetch-recent";
 import { publishNewContent } from "./routes/contents/publish-new";
 import { getContent } from "./routes/contents/get-content";
+import { getProfile } from "./routes/users/get-profile";
 
 export const app = fastify();
 
@@ -28,6 +29,7 @@ app.register(authenticateWithPassword);
 app.register(fetchRecent);
 app.register(publishNewContent);
 app.register(getContent);
+app.register(getProfile);
 
 app
 	.listen({

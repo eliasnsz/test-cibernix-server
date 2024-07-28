@@ -62,7 +62,7 @@ describe("Get Content use-case", async () => {
 
 		expect(response).toBeUndefined();
 		expect(error?.code === "RESOURCE_NOT_FOUND").toBeTruthy();
-		expect(error?.payload.message === "Usuário não encotrado").toBeTruthy();
+		expect(error?.payload.message === "Usuário não encontrado").toBeTruthy();
 	});
 
 	it("should not be able to get a content that doesn't exist", async () => {
