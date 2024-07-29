@@ -38,4 +38,13 @@ export class PrismaUsersRepository implements UsersRepository {
 
 		return PrismaUserMapper.toDomain(user);
 	}
+
+	async save(user: User) {
+		await prisma.user.update({
+			where: {
+				id: user.id,
+			},
+			data: PrismaUserMapper.toPrisma(user),
+		});
+	}
 }

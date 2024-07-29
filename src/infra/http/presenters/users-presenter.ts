@@ -6,6 +6,7 @@ export class UsersPresenter {
 			id: content.id,
 			email: content.email,
 			username: content.username,
+			description: content.description,
 			created_at: content.createdAt,
 			updated_at: content.updatedAt,
 		};
