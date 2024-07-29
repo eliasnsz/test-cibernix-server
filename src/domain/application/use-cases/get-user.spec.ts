@@ -1,9 +1,9 @@
 import { User } from "@/domain/enterprise/entities/user";
 import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
-import { GetUserProfileUseCase } from "./get-user-profile";
+import { GetUserUseCase } from "./get-user";
 
 let usersRepository: InMemoryUsersRepository;
-let sut: GetUserProfileUseCase;
+let sut: GetUserUseCase;
 
 const user = new User({
 	username: "johndoe",
@@ -15,10 +15,10 @@ describe("Get Content use-case", async () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		await usersRepository.create(user);
-		sut = new GetUserProfileUseCase(usersRepository);
+		sut = new GetUserUseCase(usersRepository);
 	});
 
-	it("should be able to get the user profile", async () => {
+	it("should be able to get the user", async () => {
 		const [error, response] = await sut.execute({
 			username: user.username,
 		});
@@ -27,7 +27,7 @@ describe("Get Content use-case", async () => {
 		expect(response?.user).toMatchObject(usersRepository.users[0]);
 	});
 
-	it("should not be able to get the user profile that doensn't exist", async () => {
+	it("should not be able to get the user that doensn't exist", async () => {
 		const [error, response] = await sut.execute({
 			username: "random-name",
 		});

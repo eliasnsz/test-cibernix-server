@@ -43,4 +43,25 @@ export class InMemoryContentsRepository implements ContentsRepository {
 
 		return { contents, contentsTotalCount: publishedContents.length };
 	}
+
+	async fetchByUsername({
+		username,
+		limit,
+		page,
+	}: { username: string; page: number; limit: number }) {
+		const [start, end] = [limit * (page - 1), limit * page];
+
+		const publishedContents = this.contents.filter(
+			(content) =>
+				content.status === "published" && content.ownerUsername === username,
+		);
+
+		const orderedContent = publishedContents.sort((a, b) =>
+			a.publishedAt.getTime() < b.publishedAt.getTime() ? 1 : -1,
+		);
+
+		const contents = orderedContent.slice(start, end);
+
+		return { contents, contentsTotalCount: publishedContents.length };
+	}
 }

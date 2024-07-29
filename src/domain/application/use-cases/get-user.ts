@@ -1,23 +1,20 @@
 import "reflect-metadata";
-import type { User } from "@/domain/enterprise/entities/user";
 import { inject, injectable } from "tsyringe";
 import { Fail, bad, nice } from "../errors/bad-nice";
 import type { UsersRepository } from "../repositories/users-repository";
 
-interface GetUserProfileRequest {
+interface GetUserRequest {
 	username: string;
 }
 
-type Profile = Omit<User, "password">;
-
 @injectable()
-export class GetUserProfileUseCase {
+export class GetUserUseCase {
 	constructor(
 		@inject("UsersRepository")
 		private usersRepository: UsersRepository,
 	) {}
 
-	async execute({ username }: GetUserProfileRequest) {
+	async execute({ username }: GetUserRequest) {
 		const user = await this.usersRepository.findByUsername(username);
 
 		if (!user) {

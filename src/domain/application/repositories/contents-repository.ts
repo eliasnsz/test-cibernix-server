@@ -7,6 +7,14 @@ export interface ContentsRepository {
 		authorId: string,
 		slug: string,
 	): Promise<Content | null>;
+	fetchByUsername({
+		username,
+		limit,
+		page,
+	}: { username: string; page: number; limit: number }): Promise<{
+		contents: Content[];
+		contentsTotalCount: number;
+	}>;
 	fetchRecent({ limit, page }: { page: number; limit: number }): Promise<{
 		contents: Content[];
 		contentsTotalCount: number;

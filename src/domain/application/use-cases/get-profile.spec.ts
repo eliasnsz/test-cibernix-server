@@ -1,0 +1,40 @@
+import { User } from "@/domain/enterprise/entities/user";
+import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
+import { GetUserProfileUseCase } from "./get-profile";
+import { randomUUID } from "node:crypto";
+
+let usersRepository: InMemoryUsersRepository;
+let sut: GetUserProfileUseCase;
+
+const user = new User({
+	username: "johndoe",
+	email: "johndoe@example.com",
+	password: "123456",
+});
+
+describe("Get Content use-case", async () => {
+	beforeEach(async () => {
+		usersRepository = new InMemoryUsersRepository();
+		await usersRepository.create(user);
+		sut = new GetUserProfileUseCase(usersRepository);
+	});
+
+	it("should be able to get the user", async () => {
+		const [error, response] = await sut.execute({
+			authorId: user.id,
+		});
+
+		expect(error).toBeUndefined();
+		expect(response?.user).toMatchObject(usersRepository.users[0]);
+	});
+
+	it("should not be able to get the user that doensn't exist", async () => {
+		const [error, response] = await sut.execute({
+			authorId: randomUUID(),
+		});
+
+		expect(response).toBeUndefined();
+		expect(error?.code === "RESOURCE_NOT_FOUND").toBeTruthy();
+		expect(error?.payload.message === "Usuário não encontrado").toBeTruthy();
+	});
+});
