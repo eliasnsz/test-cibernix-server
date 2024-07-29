@@ -5,6 +5,7 @@ interface UserProps {
 	id: string;
 	username: string;
 	email: string;
+	description: string;
 	password: string;
 	createdAt: Date;
 	updatedAt: Date;
@@ -25,6 +26,14 @@ export class User {
 		return this.props.email;
 	}
 
+	get description() {
+		return this.props.description;
+	}
+
+	set description(value: string) {
+		this.props.description = value;
+	}
+
 	get password() {
 		return this.props.password;
 	}
@@ -37,10 +46,16 @@ export class User {
 		return this.props.updatedAt;
 	}
 
-	constructor(props: Optional<UserProps, "id" | "createdAt" | "updatedAt">) {
+	constructor(
+		props: Optional<
+			UserProps,
+			"id" | "createdAt" | "updatedAt" | "description"
+		>,
+	) {
 		this.props = {
 			...props,
 			id: props.id ?? randomUUID(),
+			description: props.description ?? "",
 			createdAt: props.createdAt ?? new Date(),
 			updatedAt: new Date(),
 		};
