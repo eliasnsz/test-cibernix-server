@@ -15,6 +15,7 @@ import { getProfile } from "./routes/users/get-profile";
 import { fetchUserContent } from "./routes/contents/fetch-user-content";
 import { updateContent } from "./routes/contents/update-content";
 import { updateUser } from "./routes/users/update-profile";
+import { deleteContent } from "./routes/contents/delete-content";
 
 export const app = fastify();
 
@@ -38,6 +39,7 @@ app.register(getProfile);
 app.register(fetchUserContent);
 app.register(updateContent);
 app.register(updateUser);
+app.register(deleteContent);
 
 app
 	.listen({

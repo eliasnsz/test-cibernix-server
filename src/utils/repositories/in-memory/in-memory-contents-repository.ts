@@ -9,13 +9,20 @@ export class InMemoryContentsRepository implements ContentsRepository {
 	}
 
 	async findById(contentId: string) {
-		return this.contents.find((content) => content.id === contentId) ?? null;
+		return (
+			this.contents.find(
+				(content) => content.id === contentId && content.status === "published",
+			) ?? null
+		);
 	}
 
 	async findByAuthorIdAndSlug(authorId: string, slug: string) {
 		return (
 			this.contents.find(
-				(content) => content.slug === slug && content.authorId === authorId,
+				(content) =>
+					content.slug === slug &&
+					content.authorId === authorId &&
+					content.status === "published",
 			) ?? null
 		);
 	}

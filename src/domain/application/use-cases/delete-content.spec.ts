@@ -1,21 +1,34 @@
 import { randomUUID } from "node:crypto";
 import { Content } from "@/domain/enterprise/entities/content";
-import { DeleteContentUseCase } from "./delete-content";
+import { User } from "@/domain/enterprise/entities/user";
 import { InMemoryContentsRepository } from "@/utils/repositories/in-memory/in-memory-contents-repository";
+import { InMemoryUsersRepository } from "@/utils/repositories/in-memory/in-memory-users-repository";
+import { DeleteContentUseCase } from "./delete-content";
 
 let contentsRepository: InMemoryContentsRepository;
+let usersRepository: InMemoryUsersRepository;
 let sut: DeleteContentUseCase;
+
+const user = new User({
+	username: "johndoe",
+	email: "johndoe@example.com",
+	password: "123456",
+});
 
 describe("Delete Content use-case", async () => {
 	beforeEach(() => {
+		usersRepository = new InMemoryUsersRepository();
 		contentsRepository = new InMemoryContentsRepository();
-		sut = new DeleteContentUseCase(contentsRepository);
+		usersRepository.create(user);
+
+		sut = new DeleteContentUseCase(contentsRepository, usersRepository);
 	});
 
 	it("should not be able to delete content that doesn't exists", async () => {
 		const [error] = await sut.execute({
 			contentId: "not-existent-id",
-			authorId: randomUUID(),
+			userId: randomUUID(),
+			authorUsername: "johndoe",
 		});
 
 		expect(error?.code === "RESOURCE_NOT_FOUND").toBeTruthy();
@@ -33,7 +46,8 @@ describe("Delete Content use-case", async () => {
 
 		const [error] = await sut.execute({
 			contentId: anotherUserContent.id,
-			authorId: randomUUID(),
+			userId: randomUUID(),
+			authorUsername: "johndoe",
 		});
 
 		expect(error?.code === "NOT_ALLOWED").toBeTruthy();
@@ -53,8 +67,9 @@ describe("Delete Content use-case", async () => {
 		await contentsRepository.create(content);
 
 		const [error, result] = await sut.execute({
-			authorId: content.authorId,
+			userId: content.authorId,
 			contentId: content.id,
+			authorUsername: "johndoe",
 		});
 
 		const deletedContent = contentsRepository.contents[0];
