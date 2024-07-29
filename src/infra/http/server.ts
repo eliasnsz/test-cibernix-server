@@ -12,6 +12,7 @@ import { publishNewContent } from "./routes/contents/publish-new";
 import { getContent } from "./routes/contents/get-content";
 import { getUser } from "./routes/users/get-user";
 import { getProfile } from "./routes/users/get-profile";
+import { fetchUserContent } from "./routes/contents/fetch-user-content";
 
 export const app = fastify();
 
@@ -32,6 +33,7 @@ app.register(publishNewContent);
 app.register(getContent);
 app.register(getUser);
 app.register(getProfile);
+app.register(fetchUserContent);
 
 app
 	.listen({

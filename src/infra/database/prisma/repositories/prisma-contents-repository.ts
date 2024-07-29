@@ -68,6 +68,39 @@ export class PrismaContentsRepository implements ContentsRepository {
 		};
 	}
 
+	async fetchByUsername({
+		username,
+		limit,
+		page,
+	}: { username: string; page: number; limit: number }) {
+		const contentsTotalCount = await prisma.content.count({
+			where: {
+				ownerUsername: username,
+				status: "published",
+			},
+			orderBy: {
+				publishedAt: "desc",
+			},
+		});
+
+		const contents = await prisma.content.findMany({
+			where: {
+				ownerUsername: username,
+				status: "published",
+			},
+			orderBy: {
+				publishedAt: "desc",
+			},
+			take: limit,
+			skip: limit * (page - 1),
+		});
+
+		return {
+			contents: contents.map(PrismaContentMapper.toDomain),
+			contentsTotalCount: contentsTotalCount,
+		};
+	}
+
 	async save(content: Content) {
 		await prisma.content.update({
 			where: {
