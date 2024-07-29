@@ -16,6 +16,7 @@ import { fetchUserContent } from "./routes/contents/fetch-user-content";
 import { updateContent } from "./routes/contents/update-content";
 import { updateUser } from "./routes/users/update-profile";
 import { deleteContent } from "./routes/contents/delete-content";
+import { env } from "@/utils/env/env";
 
 export const app = fastify();
 
@@ -26,7 +27,7 @@ app.register(fastifyCors, {
 	origin: "*",
 });
 app.register(require("@fastify/jwt"), {
-	secret: "supersecret",
+	secret: env.JWT_SECRET,
 });
 
 app.register(createAccount);

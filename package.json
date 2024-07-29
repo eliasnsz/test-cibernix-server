@@ -6,7 +6,7 @@
     "services:up": "docker compose up -d && npx prisma migrate deploy",
     "services:down": "docker compose down",
     "dev": "npm run services:up && tsx watch src/infra/http/server.ts",
-    "build": "npx prisma migrate deploy && tsup src",
+    "build": "npx prisma migrate deploy && npx tsup src",
     "start": "node dist/infra/http/server.js",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -20,6 +20,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.14.12",
     "prisma": "^5.17.0",
+    "tsup": "^8.2.3",
     "tsx": "^4.16.2",
     "typescript": "^5.5.4",
     "vitest": "^2.0.4"
