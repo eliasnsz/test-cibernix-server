@@ -82,7 +82,6 @@ describe("Update Content use-case", async () => {
 		const editedContent = contentsRepository.contents[0];
 
 		expect(error).toBeUndefined();
-		expect(result).toBeUndefined();
 		expect(editedContent.publishedAt).not.toBe(editedContent.updatedAt);
 		expect(editedContent).toMatchObject({
 			id: content.id,

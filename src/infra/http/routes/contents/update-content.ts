@@ -4,27 +4,35 @@ import { container } from "tsyringe";
 import z from "zod";
 import { PublishContentUseCase } from "@/domain/application/use-cases/publish-content";
 import { auth } from "../../middlewares/auth-verify";
+import { UpdateContentUseCase } from "@/domain/application/use-cases/update-content";
 
-export async function publishNewContent(app: FastifyInstance) {
+export async function updateContent(app: FastifyInstance) {
 	app
 		.withTypeProvider<ZodTypeProvider>()
 		.register(auth)
-		.post("/contents", {
+		.put("/contents/:username/:slug", {
 			schema: {
+				params: z.object({
+					username: z.string(),
+					slug: z.string(),
+				}),
 				body: z.object({
+					contentId: z.string().uuid(),
 					title: z.string(),
 					body: z.string(),
 				}),
 			},
 			handler: async (request, reply) => {
-				const publishNewContent = container.resolve(PublishContentUseCase);
+				const updateContent = container.resolve(UpdateContentUseCase);
 
-				const { title, body } = request.body;
+				const { username, slug } = request.params;
+				const { contentId, title, body } = request.body;
 
-				const [error, response] = await publishNewContent.execute({
+				const [error, response] = await updateContent.execute({
+					authorId: request.user.id,
+					contentId: contentId,
 					title,
 					body,
-					authorId: request.user.id,
 				});
 
 				if (error) {
@@ -33,6 +41,12 @@ export async function publishNewContent(app: FastifyInstance) {
 							return reply.status(404).send({
 								message: error.payload.message,
 								statusCode: 404,
+							});
+
+						case "NOT_ALLOWED":
+							return reply.status(403).send({
+								message: error.payload.message,
+								statusCode: 403,
 							});
 
 						case "SLUG_CONFLICT":

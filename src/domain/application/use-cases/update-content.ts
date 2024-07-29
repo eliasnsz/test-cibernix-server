@@ -1,16 +1,22 @@
+import "reflect-metadata";
 import { Slug } from "@/domain/enterprise/value-objects/slug";
 import { Fail, bad, nice } from "../errors/bad-nice";
 import type { ContentsRepository } from "../repositories/contents-repository";
+import { inject, injectable } from "tsyringe";
 
 interface UpdateContentRequest {
-	contentId: string;
 	authorId: string;
+	contentId: string;
 	title: string;
 	body: string;
 }
 
+@injectable()
 export class UpdateContentUseCase {
-	constructor(private contentsRepository: ContentsRepository) {}
+	constructor(
+		@inject("ContentsRepository")
+		private contentsRepository: ContentsRepository,
+	) {}
 
 	async execute({ title, body, authorId, contentId }: UpdateContentRequest) {
 		const content = await this.contentsRepository.findById(contentId);
@@ -32,10 +38,11 @@ export class UpdateContentUseCase {
 		}
 
 		const anotherContentWithSameSlug =
-			await this.contentsRepository.findByAuthorIdAndSlug(
+			title !== content.title &&
+			(await this.contentsRepository.findByAuthorIdAndSlug(
 				authorId,
 				Slug.createFromText(title),
-			);
+			));
 
 		if (anotherContentWithSameSlug) {
 			return bad(
@@ -51,6 +58,6 @@ export class UpdateContentUseCase {
 
 		await this.contentsRepository.save(content);
 
-		return nice();
+		return nice({ content });
 	}
 }
