@@ -46,7 +46,7 @@ Siga os passos abaixo para configurar o ambiente de desenvolvimento:
    ```bash
    npm install
    ```
-4. Renomeie o arquivo `.env.example` para `.env.local`
+4. Renomeie o arquivo `.env.example` para `.env`
 
 5. Para inicializar o container e rodar as migrations, execute o comando:
    ```bash
