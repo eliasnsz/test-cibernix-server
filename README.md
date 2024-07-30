@@ -9,6 +9,8 @@
 
 Este repositório contém o código back-end do teste técnico da Cibernix Tecnologias. O projeto consiste em um blog onde é possivel criar publicações a partir de um editor em markdown. [Clique para conferir o projeto ao vivo](https://test-cibernix-client.vercel.app/)
 
+_Obs.: é provável que, na primeira tentativa de acessar o projeto, a Vercel retorne um erro de Timeout. Isso ocorre porque o backend está hospedado no plano gratuito do [Render](https://render.com) que, após um tempo de inatividade, desliga o servidor. Portanto, ao receber o erro basta aguardar alguns segundos e atualizar a página._
+
 Neste projeto utilizei padrões de arquitetura e design de software como:
 
 - Clean Architecture
@@ -44,32 +46,36 @@ Siga os passos abaixo para configurar o ambiente de desenvolvimento:
    ```bash
    npm install
    ```
-4. Para inicializar o container e rodar as migrations, execute o comando:
+4. Renomeie o arquivo `.env.example` para `.env.local`
+
+5. Para inicializar o container e rodar as migrations, execute o comando:
    ```bash
    npm run service:up
    ```
-5. Rode os testes unitários:
+6. Rode os testes unitários:
    ```bash
    npm test
    ```
-6. Inicialize o projeto:
+7. Inicialize o projeto:
    ```bash
    npm run dev
    ```
-7. O servidor estará rodando na URL:
+8. O servidor estará rodando na URL:
    ```bash
    http://localhost:3333/
    ```
 
 ## Features
 
-- [x] Registrar novo usuário **`POST /users`**
-- [x] Autenticar usuário **`POST /sessions`**
-- [x] Atualizar descrição do perfil do usuário **`PUT /user`**
-- [x] Criar publicação **`POST /contents`**
-- [x] Editar publicação **`PUT /contents/:username/:slug`**
-- [x] Excluir publicação **`DELETE /contents/:username/:contentId`**
-- [x] Listar publicações com paginação **`GET /contents?page=1&limit=30`**
-- [x] Listar publicações de um usuário específico com paginação **`GET /contents/:username?page=1&limit=30`**
-- [x] Ver perfil de outros usuários **`GET /users/:username`**
-- [ ] Comentar nas publicações
+| Feito | Feature                                                   | Endpoint                                      |
+| ----- | --------------------------------------------------------- | --------------------------------------------- |
+| ✅    | Registrar novo usuário                                    | **`POST /users`**                             |
+| ✅    | Autenticar usuário                                        | **`POST /sessions`**                          |
+| ✅    | Atualizar descrição do perfil do usuário                  | **`PUT /user`**                               |
+| ✅    | Criar publicação                                          | **`POST /contents`**                          |
+| ✅    | Editar publicação                                         | **`PUT /contents/:username/:slug`**           |
+| ✅    | Excluir publicação                                        | **`DELETE /contents/:username/:contentId`**   |
+| ✅    | Listar publicações com paginação                          | **`GET /contents?page=1&limit=30`**           |
+| ✅    | Listar publicações de um usuário específico com paginação | **`GET /contents/:username?page=1&limit=30`** |
+| ✅    | Ver perfil de outros usuários                             | **`GET /users/:username`**                    |
+|       | Comentar nas publicações                                  | -                                             |
